@@ -1,0 +1,24 @@
+version: 2
+updates:
+  # 1. Keep GitHub Actions (deploy.yml, etc.) up to date
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    # Group these updates into one PR to reduce noise
+    groups:
+      actions:
+        patterns:
+          - "*"
+
+  # 2. Keep Python dependencies (mkdocs-material) up to date
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    groups:
+      python-deps:
+        patterns:
+          - "*"
