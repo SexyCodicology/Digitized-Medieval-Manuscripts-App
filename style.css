@@ -763,11 +763,6 @@ footer ul li {
 /* Responsive styles for filter buttons */
 @media (max-width: 767px) {
     /* Stack filters on mobile */
-    .col-md-2 {
-        width: 100%;
-        margin-top: 0.75rem;
-    }
-
     .btn-filter {
         font-size: 0.875rem;
         padding: 0.75rem 1rem;
@@ -776,20 +771,25 @@ footer ul li {
     .btn-filter .filter-text {
         display: inline; /* Always show text on mobile */
     }
+
+    /* Full width for dropdowns on mobile */
+    .justify-content-center > .col-md-4 {
+        max-width: 100%;
+    }
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
-    /* On tablets, show icons only to save space */
+    /* On tablets, show full text in buttons */
     .btn-filter {
-        padding: 0.625rem 0.5rem;
+        padding: 0.625rem 0.75rem;
     }
 
     .btn-filter .filter-text {
-        display: none;
+        display: inline;
     }
 
     .btn-filter i {
-        font-size: 1.125rem;
+        font-size: 1rem;
     }
 }
 
@@ -797,6 +797,12 @@ footer ul li {
     /* On larger screens, show both icon and text */
     .btn-filter .filter-text {
         display: inline;
+    }
+
+    /* Adjust dropdown widths for better centering */
+    .justify-content-center > .col-lg-3 {
+        flex: 0 0 25%;
+        max-width: 25%;
     }
 }
 
