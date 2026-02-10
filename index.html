@@ -203,8 +203,10 @@
 
             <section aria-labelledby="filters-heading">
                 <h2 id="filters-heading" class="visually-hidden">Search and Filter Libraries</h2>
-                <div class="row g-3 mb-4">
-                    <div class="col-md-4">
+
+                <!-- Row 1: Search Bar + Filter Buttons -->
+                <div class="row g-3 mb-3">
+                    <div class="col-md-8 col-lg-9">
                         <label for="searchInput" class="visually-hidden">Search libraries and cities</label>
                         <div class="input-group shadow-sm">
                             <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted" aria-hidden="true"></i></span>
@@ -212,19 +214,7 @@
                         </div>
                         <small id="search-help" class="visually-hidden">Type to search by library name, project name, city, or nation</small>
                     </div>
-                    <div class="col-md-3">
-                        <label for="nationSelect" class="visually-hidden">Filter by nation</label>
-                        <select id="nationSelect" class="form-select shadow-sm" aria-label="Filter by nation">
-                            <option value="All">All Nations</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label for="projectSelect" class="visually-hidden">Filter by project</label>
-                        <select id="projectSelect" class="form-select shadow-sm" aria-label="Filter by project">
-                            <option value="All">All Projects</option>
-                        </select>
-                    </div>
-                    <div class="col-md-2 d-flex gap-2">
+                    <div class="col-md-4 col-lg-3">
                         <div class="btn-group w-100 shadow-sm" role="group" aria-label="Feature filters">
                             <input type="checkbox" class="btn-check" id="iiifCheck" autocomplete="off" aria-label="Filter to show only IIIF-enabled libraries">
                             <label class="btn btn-outline-secondary btn-filter" for="iiifCheck">
@@ -234,10 +224,26 @@
 
                             <input type="checkbox" class="btn-check" id="freeCheck" autocomplete="off" aria-label="Filter to show only libraries with open licenses">
                             <label class="btn btn-outline-secondary btn-filter" for="freeCheck">
-                                <i class="bi bi-unlock" aria-hidden="true"> </i>
+                                <i class="bi bi-unlock" aria-hidden="true"></i>
                                 <span class="filter-text">Open</span>
                             </label>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Row 2: Centered Dropdowns -->
+                <div class="row g-3 mb-4 justify-content-center">
+                    <div class="col-md-4 col-lg-3">
+                        <label for="nationSelect" class="visually-hidden">Filter by nation</label>
+                        <select id="nationSelect" class="form-select shadow-sm" aria-label="Filter by nation">
+                            <option value="All">All Nations</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4 col-lg-3">
+                        <label for="projectSelect" class="visually-hidden">Filter by project</label>
+                        <select id="projectSelect" class="form-select shadow-sm" aria-label="Filter by project">
+                            <option value="All">All Projects</option>
+                        </select>
                     </div>
                 </div>
             </section>
