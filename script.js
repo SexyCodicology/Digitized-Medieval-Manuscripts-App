@@ -220,7 +220,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const matchesSearch = !term ||
                 (item.library && item.library.toLowerCase().includes(term)) ||
                 (item.city && item.city.toLowerCase().includes(term)) ||
-                (item.nation && item.nation.toLowerCase().includes(term));
+                (item.nation && item.nation.toLowerCase().includes(term)) ||
+                (item.is_part_of_project_name && item.is_part_of_project_name.toLowerCase().includes(term));
 
             // Nation Filter
             const matchesNation = selectedNation === 'All' || item.nation === selectedNation;
