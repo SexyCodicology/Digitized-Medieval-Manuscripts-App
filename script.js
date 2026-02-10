@@ -30,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const emptyState = document.getElementById('emptyState');
     const searchInput = document.getElementById('searchInput');
     const nationSelect = document.getElementById('nationSelect');
+    const projectSelect = document.getElementById('projectSelect');
     const iiifCheck = document.getElementById('iiifCheck');
     const freeCheck = document.getElementById('freeCheck');
     const clearFiltersBtn = document.getElementById('clearFilters');
@@ -38,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const statTotal = document.getElementById('statTotal');
     const statNations = document.getElementById('statNations');
     const statIIIF = document.getElementById('statIIIF');
+    const statProjects = document.getElementById('statProjects');
     const showingCount = document.getElementById('showingCount');
 
     // 1. Fetch Data
@@ -60,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function initializeDashboard() {
         populateNationFilter();
+        populateProjectFilter();
         updateStats(allData);
         renderTable(allData);
         initializeSorting();
@@ -153,6 +156,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 badges = `<span class="text-muted small fst-italic">Standard Access</span>`;
             }
 
+            // Project affiliation badge
+            const projectBadge = item.is_part_of && item.is_part_of_project_name
+                ? `<div class="small mt-1"><a href="${item.is_part_of_url}" target="_blank" class="text-muted text-decoration-none"><i class="bi bi-collection me-1"></i>${item.is_part_of_project_name}</a></div>`
+                : '';
+
             // Website handling
             const websiteBtn = item.website
                 ? `<a href="${item.website}" target="_blank" class="btn btn-sm btn-outline-primary rounded-pill">Visit <i class="bi bi-arrow-right-short"></i></a>`
@@ -161,6 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
             row.innerHTML = `
                 <td>
                     <div class="library-name">${item.library}</div>
+                    ${projectBadge}
                 </td>
                 <td>
                     <div class="fw-medium">${item.nation}</div>
@@ -187,6 +196,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Calculate IIIF Count
         statIIIF.innerText = data.filter(item => item.iiif === true).length;
+
+        // Calculate Active Projects Count
+        const uniqueProjects = new Set(
+            data
+                .filter(item => item.is_part_of === true && item.is_part_of_project_name)
+                .map(item => item.is_part_of_project_name)
+        );
+        statProjects.innerText = uniqueProjects.size;
     }
 
     // 4. Populate Dropdown
@@ -202,10 +219,27 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function populateProjectFilter() {
+        // Extract unique project names from items where is_part_of is true, sort them
+        const projects = [...new Set(
+            allData
+                .filter(item => item.is_part_of === true && item.is_part_of_project_name)
+                .map(item => item.is_part_of_project_name)
+        )].sort();
+
+        projects.forEach(project => {
+            const option = document.createElement('option');
+            option.value = project;
+            option.textContent = project;
+            projectSelect.appendChild(option);
+        });
+    }
+
     // 5. Filter Engine
     function filterData() {
         const term = searchInput.value.toLowerCase().trim();
         const selectedNation = nationSelect.value;
+        const selectedProject = projectSelect.value;
         const requireIIIF = iiifCheck.checked;
         const requireFree = freeCheck.checked;
 
@@ -214,16 +248,20 @@ document.addEventListener('DOMContentLoaded', () => {
             const matchesSearch = !term ||
                 (item.library && item.library.toLowerCase().includes(term)) ||
                 (item.city && item.city.toLowerCase().includes(term)) ||
-                (item.nation && item.nation.toLowerCase().includes(term));
+                (item.nation && item.nation.toLowerCase().includes(term)) ||
+                (item.is_part_of_project_name && item.is_part_of_project_name.toLowerCase().includes(term));
 
             // Nation Filter
             const matchesNation = selectedNation === 'All' || item.nation === selectedNation;
+
+            // Project Filter
+            const matchesProject = selectedProject === 'All' || item.is_part_of_project_name === selectedProject;
 
             // Checkbox Filters
             const matchesIIIF = !requireIIIF || item.iiif === true;
             const matchesFree = !requireFree || item.is_free_cultural_works_license === true;
 
-            return matchesSearch && matchesNation && matchesIIIF && matchesFree;
+            return matchesSearch && matchesNation && matchesProject && matchesIIIF && matchesFree;
         });
 
         renderTable(filtered);
@@ -233,6 +271,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event Listeners
     searchInput.addEventListener('input', filterData);
     nationSelect.addEventListener('change', filterData);
+    projectSelect.addEventListener('change', filterData);
     iiifCheck.addEventListener('change', filterData);
     freeCheck.addEventListener('change', filterData);
 
@@ -240,6 +279,7 @@ document.addEventListener('DOMContentLoaded', () => {
         clearFiltersBtn.addEventListener('click', () => {
             searchInput.value = '';
             nationSelect.value = 'All';
+            projectSelect.value = 'All';
             iiifCheck.checked = false;
             freeCheck.checked = false;
             filterData();
